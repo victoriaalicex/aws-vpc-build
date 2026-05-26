@@ -151,7 +151,7 @@ This VPC serves as the deployment infrastructure for the [F1 Pit Lane Dashboard]
 
 **Security group open to 0.0.0.0/0** — initial setup had SSH open to the entire internet. Fixed by changing the source to My IP only.
 
-**Local IP vs public IP** — entered `192.168.1.7` (local network IP) instead of my public IP into the security group. AWS needs the public IP — fixed by using the My IP dropdown which auto-detects it.
+**Local IP vs public IP** — entered `my local network ip redacted` (local network IP) instead of my public IP into the security group. AWS needs the public IP — fixed by using the My IP dropdown which auto-detects it.
 
 ---
 
