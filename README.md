@@ -79,7 +79,7 @@ EC2 Instance (t3.micro) ← Security Group (port 22, my IP only)
 
 **Security group open to 0.0.0.0/0** — initial setup had SSH open to the entire internet. Fixed by changing the source to My IP only.
 
-**Local IP vs public IP** — entered `192.168.1.7` (local network IP) instead of my public IP into the security group. AWS needs the public IP — fixed by using the My IP dropdown which auto-detects it.
+**Local IP vs public IP** — entered `my local network ip redacted` (local network IP) instead of my public IP into the security group. AWS needs the public IP — fixed by using the My IP dropdown which auto-detects it.
 
 ---
 
