@@ -71,7 +71,7 @@ EC2 Instance (t3.micro) ← Security Group (port 22, my IP only)
 
 ## Mistakes Made and Fixed
 
-**Wrong CIDR range** — initially typed `10.0.1.0/24` as the subnet when my VPC was `172.31.0.0/16`. These are different IP families — the subnet must be a slice of the parent VPC range.
+**Wrong CIDR range** — initially typed `10.0.1.0/24` as the subnet when my VPC was `my home ip redacted`. These are different IP families — the subnet must be a slice of the parent VPC range.
 
 **Subnet overlap** — hit an overlap error because AWS default subnets already occupied part of the range. Fixed by checking existing subnets and picking a non-overlapping block.
 
