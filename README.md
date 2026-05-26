@@ -69,18 +69,19 @@ EC2 Instance (t3.micro) ← Security Group (port 22, my IP only)
 
 ---
 
-## Mistakes Made and Fixed
+## Challenges Encountered and Lessons Learned
 
-**Wrong CIDR range** — initially typed `10.0.1.0/24` as the subnet when my VPC was `my home ip redacted`. These are different IP families — the subnet must be a slice of the parent VPC range.
+**Wrong CIDR range** — initially typed a subnet CIDR from a different IP family than the VPC. The subnet must be a slice of the parent VPC range. For example if the VPC is `10.0.0.0/16` the subnet must start with `10.0.x.x`.
 
-**Subnet overlap** — hit an overlap error because AWS default subnets already occupied part of the range. Fixed by checking existing subnets and picking a non-overlapping block.
+**Subnet overlap** — hit an overlap error because AWS default subnets already occupied part of the range. Fixed by checking existing subnets in the VPC console and picking a non-overlapping block.
 
-**Default VPC conflict** — originally launched the EC2 into the AWS default VPC instead of my custom one. The default VPC already had an IGW attached so I couldn't attach a second one. Fixed by terminating everything and rebuilding with a custom VPC from scratch.
+**Default VPC conflict** — originally launched the EC2 into the AWS default VPC instead of my custom one. The default VPC already had an IGW attached so a second one could not be attached. Fixed by terminating everything and rebuilding with a custom VPC from scratch.
 
-**Security group open to 0.0.0.0/0** — initial setup had SSH open to the entire internet. Fixed by changing the source to My IP only.
+**Security group open to the internet** — initial setup had SSH open to all sources (`0.0.0.0/0`). Fixed by restricting the source to My IP only using the AWS dropdown which auto-detects your current public IP.
 
-**Local IP vs public IP** — entered `my local network ip redacted` (local network IP) instead of my public IP into the security group. AWS needs the public IP — fixed by using the My IP dropdown which auto-detects it.
+**Local IP vs public IP** — entered the local network IP assigned by my router instead of my public IP into the security group. AWS needs the public-facing IP — fixed by using the My IP dropdown rather than typing manually. This is why the SSH connection was timing out — AWS was expecting traffic from an address that would never arrive.
 
+**SSH key permissions** — learned that SSH refuses to connect if the `.pem` key file has loose permissions. The `chmod 400` command restricts the file so only the owner can read it, which is a security requirement enforced by the SSH client.
 ---
 
 ## Infrastructure Details
@@ -141,17 +142,19 @@ This VPC serves as the deployment infrastructure for the [F1 Pit Lane Dashboard]
 
 ---
 
-## Mistakes Made and Fixed
+## Challenges Encountered and Lessons Learned
 
-**Wrong CIDR range** — initially typed `10.0.1.0/24` as the subnet when my VPC was `172.31.0.0/16`. These are different IP families — the subnet must be a slice of the parent VPC range.
+**Wrong CIDR range** — initially typed a subnet CIDR from a different IP family than the VPC. The subnet must be a slice of the parent VPC range. For example if the VPC is `10.0.0.0/16` the subnet must start with `10.0.x.x`.
 
-**Subnet overlap** — hit an overlap error because AWS default subnets already occupied part of the range. Fixed by checking existing subnets and picking a non-overlapping block.
+**Subnet overlap** — hit an overlap error because AWS default subnets already occupied part of the range. Fixed by checking existing subnets in the VPC console and picking a non-overlapping block.
 
-**Default VPC conflict** — originally launched the EC2 into the AWS default VPC instead of my custom one. The default VPC already had an IGW attached so I couldn't attach a second one. Fixed by terminating everything and rebuilding with a custom VPC from scratch.
+**Default VPC conflict** — originally launched the EC2 into the AWS default VPC instead of my custom one. The default VPC already had an IGW attached so a second one could not be attached. Fixed by terminating everything and rebuilding with a custom VPC from scratch.
 
-**Security group open to 0.0.0.0/0** — initial setup had SSH open to the entire internet. Fixed by changing the source to My IP only.
+**Security group open to the internet** — initial setup had SSH open to all sources (`0.0.0.0/0`). Fixed by restricting the source to My IP only using the AWS dropdown which auto-detects your current public IP.
 
-**Local IP vs public IP** — entered `my local network ip redacted` (local network IP) instead of my public IP into the security group. AWS needs the public IP — fixed by using the My IP dropdown which auto-detects it.
+**Local IP vs public IP** — entered the local network IP assigned by my router instead of my public IP into the security group. AWS needs the public-facing IP — fixed by using the My IP dropdown rather than typing manually. This is why the SSH connection was timing out — AWS was expecting traffic from an address that would never arrive.
+
+**SSH key permissions** — learned that SSH refuses to connect if the `.pem` key file has loose permissions. The `chmod 400` command restricts the file so only the owner can read it, which is a security requirement enforced by the SSH client.
 
 ---
 
